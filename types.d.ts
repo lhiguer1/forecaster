@@ -1,10 +1,10 @@
-export interface ForecastObject {
+interface ForecastObject {
   location: Location;
   current: Current;
   forecast: Forecast;
 }
 
-export interface Location {
+interface Location {
   name: string;
   region: string;
   country: string;
@@ -15,7 +15,7 @@ export interface Location {
   localtime: string;
 }
 
-export interface Current {
+interface Current {
   last_updated_epoch: number;
   last_updated: string;
   temp_c: number;
@@ -41,11 +41,11 @@ export interface Current {
   gust_kph: number;
 }
 
-export interface Forecast {
+interface Forecast {
   forecastday: Forecastday[];
 }
 
-export interface Forecastday {
+interface Forecastday {
   date: string;
   date_epoch: number;
   day: Day;
@@ -53,7 +53,7 @@ export interface Forecastday {
   hour: Hour[];
 }
 
-export interface Day {
+interface Day {
   maxtemp_c: number;
   maxtemp_f: number;
   mintemp_c: number;
@@ -76,7 +76,7 @@ export interface Day {
   uv: number;
 }
 
-export interface Astro {
+interface Astro {
   sunrise: string;
   sunset: string;
   moonrise: string;
@@ -87,7 +87,7 @@ export interface Astro {
   is_sun_up: number;
 }
 
-export interface Hour {
+interface Hour {
   time_epoch: number;
   time: string;
   temp_c: number;
@@ -124,7 +124,7 @@ export interface Hour {
   uv: number;
 }
 
-export interface Condition {
+interface Condition {
   text: string;
   icon: string;
   code: number;
