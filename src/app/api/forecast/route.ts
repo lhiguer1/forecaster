@@ -1,4 +1,4 @@
-export async function getForecast() {
+export async function GET() {
   const url = new URL("https://api.weatherapi.com/v1/forecast.json");
   // Location is hardcoded for now
   url.searchParams.set("q", "Phoenix");
@@ -7,9 +7,11 @@ export async function getForecast() {
 
   const res = await fetch(url);
 
-  if (!res.ok) return undefined;
+  if (!res.ok) {
+    return Response.json(await res.json());
+  }
 
   const data: ForecastObject = await res.json();
 
-  return data;
+  return Response.json(data);
 }
