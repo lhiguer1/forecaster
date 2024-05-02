@@ -1,27 +1,34 @@
-import type { Metadata } from "next";
-import { getForecast } from "@/lib/forecast";
+"use client";
 
-export async function generateMetadata(): Promise<Metadata> {
-  let forecastObj = await getForecast();
-  return forecastObj === undefined
-    ? {}
-    : {
-        title: `${forecastObj.location.name} | Forecaster`,
-        description: `${forecastObj.location.name} Forecast`,
-      };
-}
+import { useEffect, useState } from "react";
+import Loading from "@/app/loading";
+import useSWR, { Fetcher } from "swr";
 
-export default async function Home() {
-  let forecastObj = await getForecast();
+export default function Home() {
+  const [coords, setCoords] = useState<GeolocationCoordinates>();
+  const {
+    data: localForecast,
+    error,
+    isLoading = false,
+  } = useSWR<ForecastObject, Error>(
+    coords ? `/api/forecast?q=${coords.latitude},${coords.longitude}` : null,
+    (url: string) => fetch(url).then((res) => res.json())
+  );
 
-  if (forecastObj === undefined) {
-    throw new Error("Failed to fetch forecast");
-  }
-  let { location, forecast } = forecastObj;
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        setCoords(coords);
+      });
+    }
+  }, []);
+
+  if (error) throw error;
+  if (!coords || isLoading) return <Loading />;
 
   return (
     <main className="prose">
-      <h2>{location.name}</h2>
+      <h2>{localForecast?.location.name}</h2>
       <table className="table-fixed text-center">
         <thead>
           <tr>
@@ -34,16 +41,18 @@ export default async function Home() {
           </tr>
         </thead>
         <tbody>
-          {forecast.forecastday.map(({ date, day, astro }, index) => (
-            <tr key={index}>
-              <td>{date}</td>
-              <td>{day.mintemp_f}</td>
-              <td>{day.avgtemp_f}</td>
-              <td>{day.maxtemp_f}</td>
-              <td>{astro.sunrise}</td>
-              <td>{astro.sunset}</td>
-            </tr>
-          ))}
+          {localForecast?.forecast.forecastday.map(
+            ({ date, day, astro }, index) => (
+              <tr key={index}>
+                <td>{date}</td>
+                <td>{day.mintemp_f}</td>
+                <td>{day.avgtemp_f}</td>
+                <td>{day.maxtemp_f}</td>
+                <td>{astro.sunrise}</td>
+                <td>{astro.sunset}</td>
+              </tr>
+            )
+          )}
         </tbody>
       </table>
     </main>

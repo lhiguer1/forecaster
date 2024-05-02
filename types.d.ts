@@ -129,3 +129,10 @@ interface Condition {
   icon: string;
   code: number;
 }
+
+interface WeatherAPIError {
+  error: {
+    code: number;
+    message: string;
+  };
+}
