@@ -12,7 +12,13 @@ export default function Home() {
     isLoading = false,
   } = useSWR<ForecastObject, Error>(
     coords ? `/api/forecast?q=${coords.latitude},${coords.longitude}` : null,
-    (url: string) => fetch(url).then((res) => res.json())
+    async (url: string) => {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(((await res.json()) as WeatherAPIError).error.message);
+      }
+      return res.json();
+    }
   );
 
   useEffect(() => {
