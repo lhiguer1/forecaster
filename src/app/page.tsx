@@ -33,7 +33,7 @@ export default function Home() {
   if (!coords || isLoading) return <Loading />;
 
   return (
-    <main className="prose">
+    <main>
       <h2>{localForecast?.location.name}</h2>
       <table className="table-fixed text-center">
         <thead>
