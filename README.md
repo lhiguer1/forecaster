@@ -15,4 +15,5 @@ React, TailwindCSS, NextJS, AWS Amplify
 ## Acknowledgements
 
 - [Weather API](https://www.weatherapi.com/)
+- [Transform](https://github.com/ritz078/transform) to transform WeatherAPI JSON response to TypeScript
 - [favicon.io](https://favicon.io/emoji-favicons/cloud-with-rain/)
